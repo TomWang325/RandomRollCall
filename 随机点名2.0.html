@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>随机点名</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        body{
+            background-color: rgba(47, 93, 173, 0.7);
+        }
+        h2 {
+            margin-top: 20px;
+            text-align: center;
+        }
+        h3{
+            text-align: center;
+        }
+        .resultbox{
+            width: 600px;
+            margin: 0 auto;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            padding-top:20px;
+            padding-bottom: 20px;
+            background-color: rgba(255,255,255,0.8);
+            border: 2px solid yellow;
+        }
+        .box{
+            width:600px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 25px;
+            color: red;
+            line-height: 40px;
+        }
+        .qs {
+            width: 450px;
+            height: 40px;
+            color: rgb(57, 186, 32);
+        }
+
+        .unamebox{
+            width: 600px;
+            height: 450px;
+            margin: 0 auto;
+            margin-top: 50px;
+            padding-top: 20px;
+            margin-bottom: 20px;
+            background-color:antiquewhite; }
+        #changeName{
+            width: 550px;
+            height: 280px;
+            margin-left: 20px;
+            margin-top: 30px;
+            padding-top: 10px;
+            padding-left: 10px;
+            background-color: white;
+        }
+        .btns,.changebtns {
+            text-align: center;
+        }
+
+        .btns button {
+            width: 120px;
+            height: 35px;
+            margin: 0 30px;
+        }
+        .changebtns button {
+            width: 120px;
+            height: 35px;
+            margin: 0 10px;
+        }
+        </style>
+</head>
+
+<body>
+    <h2 style="color: rgb(43, 231, 245)">随机点名</h2>
+    <div class="resultbox">
+    <div class="box">
+        <span>幸运观众：</span><span class="qs">"谁是下一个幸运观众呢?"</span>
+    </div>
+    <div class="btns">
+        <button class="start">开始</button>
+        <button class="end">结束</button>
+        <button class="delThis">删除此名</button>
+    </div>
+    </div>
+    <div class="unamebox">
+    <h3>全体成员增加/删除</h3>
+    <textarea id = "changeName">请输入要添加或删除的姓名，多个姓名之间用逗号(,)隔开。</textarea>
+    <div class="changebtns" style="margin-top:20px">
+        <button class="showName" >已有名称</button>
+        <button class="increase">添加姓名</button>
+        <button class="decrease">删除姓名</button>
+        <button class="deleteAll">删除全部</button>
+    </div>
+    </div>
+    <script>
+
+        // 总体思路
+    	// 1. 获取用户数据
+        // (相关功能) 添加、减少 、查看 、全删
+    	// 2. 通过点击按钮触发随机抽取函数
+    	// 3. 点击结束按钮抽取停止 
+    	// (2 、3 两项实现功能：点击开始按钮抽取，点击结束按钮结束抽取。需用时间器不停进行抽取实现。若不用时间器，则点击开始按钮后，随机抽取一个并直接返回结果)
+        // 4.返回结果 
+    
+    // 获取大文本框，鼠标点击删除提示
+    //const namebox = document.querySelector('.unamebox') 
+    const changeName = document.querySelector('#changeName')
+    changeName.addEventListener('click',function(){
+        changeName.value = ''
+    })
+    // 创建数组存储数据
+    let uname = []  
+    // 添加删除按钮
+    const increase = document.querySelector('.increase')
+    const decrease = document.querySelector('.decrease')
+    // 显示全部
+    const showName = document.querySelector('.showName')
+    showName.addEventListener('click',function(){
+        changeName.value = uname
+    })
+    // 获取数据，添加/删除姓名
+    increase.addEventListener('click',function(){
+        let changeNameValue = changeName.value
+        changeValue= changeNameValue.replace(/\s*/g,"");      // 清除空格
+        if ( changeValue === ''||null ){
+            alert('未添加更改内容')
+        }
+        else if(changeValue === '请输入要添加或删除的姓名，多个姓名之间用逗号(,)隔开。'){
+            alert('请先输入内容')
+        }
+        else{
+            changeNameValueZ = changeNameValue.replace(/，/ig,',')   // 中文逗号转英文
+            changeNameArr = changeNameValueZ.split(",")
+            for(i = 0;i < changeNameArr.length;i++){
+                uname.push(changeNameArr[i])
+            }
+            console.log(uname)
+            alert('添加成功')
+            changeName.value = ''
+        }
+    })
+    decrease.addEventListener('click',function(){
+        let changeNameValue = changeName.value
+        changeValue= changeNameValue.replace(/\s*/g,"");
+        if (changeValue === ''||null){
+            alert('未添加更改内容')
+        }
+        else if(changeValue === '请输入要添加或删除的姓名，多个姓名之间用逗号(,)隔开。'){
+            alert('请先输入内容')
+        }
+        else{
+            changeNameValueZ = changeNameValue.replace(/，/ig,',')   // 中文逗号转英文
+            changeNameArr = changeNameValueZ.split(",")
+            for(i = 0;i < changeNameArr.length;i++){
+                for(j = 0;j<uname.length;j++){
+                    if(uname[j] === changeNameArr[i]){
+                        uname.splice(j,1)
+                    }
+                }
+            }
+            console.log(uname)
+            alert('删除成功')
+            changeName.value = ''
+        }
+    })
+
+    // 删除全部
+    const deleteAll = document.querySelector('.deleteAll')
+    deleteAll.addEventListener('click',function(){
+        if(uname == ''){
+            alert('没有姓名')
+        }
+        else{
+            uname = []
+            alert('删除成功')
+            changeName.value = uname
+        }
+    })
+	// 获取开始按钮
+	const start = document.querySelector('.start')
+	const end = document.querySelector('.end')
+
+    // 返回结果框
+    const qs = document.querySelector('.qs') 
+
+    // 定时器id
+	let timeRandomId = 0 
+
+    // 为按钮添加监听事件，当点击时，进行随机抽取,并返回值
+	start.addEventListener('click',function(){
+        if(uname == ''){
+            qs.innerHTML = '没有成员姓名'
+        }
+		else{
+            timeRandomId = setInterval(function(){
+			const random = parseInt(Math.random() * uname.length)
+			qs.innerHTML = uname[random]
+		},35)
+        }
+	})
+	end.addEventListener('click',function(){
+		clearInterval(timeRandomId)
+	})
+    // 删除选定的姓名
+    const delThis = document.querySelector('.delThis')
+    delThis.addEventListener('click',function(){
+        for(i = 0;i < uname.length;i++){
+            if(uname[i] === qs.innerText ){
+                uname.splice(i,1)
+            }
+        }
+    })
+    </script>
+</body>
+
+</html>
