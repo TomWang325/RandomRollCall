@@ -1,2 +1,1 @@
-# RandomRollCall
-简单的随机点名demo
+# 此内容仅为个人学习练习记录
